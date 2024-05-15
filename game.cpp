@@ -13,9 +13,10 @@ Game::~Game() {
 void Game::draw() {
     board->draw(cell_size, y_offset, x_offset);
 
+    DrawRectangle(0, 0, GetScreenWidth(), y_offset, LIGHTGRAY);
     DrawLine(0, y_offset, GetScreenWidth(), y_offset, BLACK);
 
-    timer->draw();
+    timer->draw(y_offset);
 }
 
 void Game::process() {
@@ -51,9 +52,9 @@ void Game::process() {
         int x = GetMouseX();
         int y = GetMouseY();
 
-        if (y > GetScreenHeight() * 0.12f) {
-            x = (x - (GetScreenWidth() - GetScreenHeight()) / 2) / (GetScreenHeight() / board->get_height());
-            y = (y - GetScreenHeight() * 0.12f) / (GetScreenHeight() / board->get_height());
+        if (y > y_offset) {
+            x = (x - x_offset) / cell_size;
+            y = (y - y_offset) / cell_size;
 
             flag(x, y);
         }
