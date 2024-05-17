@@ -4,10 +4,14 @@
 #include "timer.hpp"
 
 Timer::Timer() {
+    restart();
+}
+
+void Timer::restart() {
     start_time = std::chrono::high_resolution_clock::now();
     paused_time = std::chrono::high_resolution_clock::now();
     end_time = std::chrono::high_resolution_clock::now();
-    started = false;
+    started = true;
     paused = false;
 }
 
@@ -17,10 +21,7 @@ void Timer::start() {
 
 void Timer::stop() {
     end_time = std::chrono::high_resolution_clock::now();
-}
-
-void Timer::reset() {
-    start_time = std::chrono::high_resolution_clock::now();
+    started = false;
 }
 
 void Timer::pause() {
@@ -36,6 +37,9 @@ int Timer::get_ticks() {
 }
 
 int Timer::get_seconds() {
+    if (!started) {
+        return std::chrono::duration_cast<std::chrono::seconds>(end_time - start_time).count();
+    }
     return std::chrono::duration_cast<std::chrono::seconds>(std::chrono::high_resolution_clock::now() - start_time).count();
 }
 
@@ -47,15 +51,10 @@ bool Timer::is_paused() {
     return paused_time.time_since_epoch().count() != 0;
 }
 
-void Timer::draw(int y_offset) {
+void Timer::draw(int y_offset, int font_size, int width) {
     int seconds = get_seconds();
     int minutes = seconds / 60;
     seconds %= 60;
-
-    int width = GetScreenWidth();
-    int height = GetScreenHeight();
-
-    int font_size = height * 0.05;
 
     int max_text_width = MeasureText("99:99", font_size);
 
@@ -65,7 +64,13 @@ void Timer::draw(int y_offset) {
     int h = font_size + 2 * timer_padding;
     int w = max_text_width + 2 * timer_padding;
     int y = (y_offset  - h) / 2;
-    int x = width * 0.05;
+    int x = width * 0.8;
+
+    int rectangle_right = x - timer_padding + w + 2 * timer_padding + digit_spacing * 2;
+
+    if (rectangle_right > width) {
+        x -= rectangle_right - width;
+    }
 
     DrawRectangle(x - timer_padding, y - timer_padding, w + 2 * timer_padding + digit_spacing * 2, h + 2 * timer_padding, BLACK);
     DrawRectangle(x, y, w + digit_spacing * 2, h, DARKGRAY);

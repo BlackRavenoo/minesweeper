@@ -13,10 +13,21 @@ Game::~Game() {
 void Game::draw() {
     board->draw(cell_size, y_offset, x_offset);
 
-    DrawRectangle(0, 0, GetScreenWidth(), y_offset, LIGHTGRAY);
-    DrawLine(0, y_offset, GetScreenWidth(), y_offset, BLACK);
+    int width = GetScreenWidth();
+    int height = GetScreenHeight();
 
-    timer->draw(y_offset);
+    DrawRectangle(0, 0, width, y_offset, LIGHTGRAY);
+    DrawLine(0, y_offset, width, y_offset, BLACK);
+
+    int font_size = height * 0.05;
+
+    DrawText("R - Restart", 10, 10, font_size * 0.8, BLACK);
+
+    timer->draw(y_offset, font_size, width);
+
+    if (board->is_game_over()) {
+        show_end_menu(width, height, font_size);
+    }
 }
 
 void Game::process() {
@@ -33,18 +44,27 @@ void Game::process() {
     y_offset = panel_height + height - cell_size * board->get_height();
     x_offset = (width - cell_size * board->get_width()) / 2;
 
+    if (IsKeyPressed(KEY_R)) {
+        board->restart();
+        timer->restart();
+    }
+
+    if (board->is_game_over()) {
+        return;
+    }
+
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
         int x = GetMouseX();
         int y = GetMouseY();
 
-        std::cout << "Mouse clicked at " << x << " " << y << std::endl;
-
-        if (y > y_offset) {
-
+        if (y > y_offset && x > x_offset) {
             x = (x - x_offset) / cell_size;
             y = (y - y_offset) / cell_size;
 
-            open(x, y);
+            board->open(x, y);
+            if (board->is_game_over()) {
+                timer->stop();
+            }
         }
     }
 
@@ -52,36 +72,37 @@ void Game::process() {
         int x = GetMouseX();
         int y = GetMouseY();
 
-        if (y > y_offset) {
+        if (y > y_offset && x > x_offset) {
             x = (x - x_offset) / cell_size;
             y = (y - y_offset) / cell_size;
 
-            flag(x, y);
+            board->flag(x, y);
         }
     }
 }
 
-void Game::open(int x, int y) {
-    board->open(x, y);
-}
+void Game::show_end_menu(int width, int height, int font_size) {
+    DrawRectangle(0, 0, width, height, ColorAlpha(LIGHTGRAY, 0.5f));
 
-void Game::flag(int x, int y) {
-    board->flag(x, y);
-}
+    std::string game_status = board->is_game_won() ? "You won!" : "Game Over!";
 
-void Game::unflag(int x, int y) {
-    board->unflag(x, y);
-}
+    const char* restart_text = "Press R to restart";
 
-bool Game::is_game_over() {
-    return board->is_game_over();
-}
+    int text_width = MeasureText(restart_text, font_size);
 
-bool Game::is_game_won() {
-    return board->is_game_won();
-}
+    DrawRectangle(width / 2 - text_width / 2 - 10, height / 2 - font_size / 2 - 10, text_width + font_size * 0.5, font_size * 2.2, ColorAlpha(DARKGRAY, 0.9));
 
-void Game::print() {
-    board->print();
-}
+    Rectangle rec = {width / 2 - text_width / 2 - 10, height / 2 - font_size / 2 - 10, text_width + font_size * 0.5f, font_size * 2.2f};
 
+    int line_thickness = 3;
+
+    DrawRectangleLinesEx(rec, line_thickness, BLACK);
+
+    if (board->is_game_won()) {
+        DrawText(game_status.c_str(), width / 2 - MeasureText(game_status.c_str(), font_size) / 2, height / 2 - font_size / 2, font_size, BLACK);
+    } else {
+        DrawText(game_status.c_str(), width / 2 - MeasureText(game_status.c_str(), font_size) / 2, height / 2 - font_size / 2, font_size, BLACK);
+    }
+
+    DrawText(restart_text, width / 2 - MeasureText(restart_text, font_size) / 2, height / 2 + font_size / 2, font_size, BLACK);
+}

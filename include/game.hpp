@@ -9,15 +9,8 @@ public:
     Game(int width, int height, int mines);
     ~Game();
     void draw();
-    void open(int x, int y);
-    void flag(int x, int y);
-    void unflag(int x, int y);
-    bool is_game_over();
-    bool is_game_won();
-    void print();
     void process();
-    void show_start_menu();
-    void show_end_menu();
+    void show_end_menu(int width, int height, int font_size);
 private:
     Board *board;
     Timer *timer;

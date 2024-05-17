@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "cell.hpp"
+#include "raylib.h"
 
 enum GameState {
     WIN,
@@ -17,10 +18,9 @@ public:
     void draw(int screen_height, int screen_width, int offset);
     void open(int x, int y);
     void flag(int x, int y);
-    void unflag(int x, int y);
     bool is_game_over();
     bool is_game_won();
-    void print();
+    void restart();
 
     int get_width();
     int get_height();
@@ -35,6 +35,9 @@ private:
     void generate_mines(int _x, int _y);
     void calculate_mines_around();
     void open_mines();
+
+    Texture2D mine_texture;
+    Texture2D flag_texture;
 };
 
 #endif

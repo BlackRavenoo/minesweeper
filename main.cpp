@@ -2,33 +2,33 @@
 #include "game.hpp"
 #include "timer.hpp"
 
-int main() {
+int main(int argc, char* argv[]) {
     const int screenWidth = 1280;
     const int screenHeight = 720;
 
     Timer timer;
 
-    SetWindowIcon(LoadImage("resourses/mine32.png"));
+    SetWindowIcon(LoadImage("resources/icon32.png"));
 
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
 
     InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
 
-    SetTargetFPS(60);
-
     int n = 10;
+    int m = 10;
     int mines = 10;
 
-    float square_size = screenWidth / n;
+    if (argc == 4) {
+        n = atoi(argv[1]);
+        m = atoi(argv[2]);
+        mines = atoi(argv[3]);
+    }
 
-    Game game(n, n, mines);
+    Game game(n, m, mines);
+
+    SetTargetFPS(60);
 
     while (!WindowShouldClose()) {
-        // Update your variables here
-        //----------------------------------------------------------------------------------
-        
-
-        // Draw
         BeginDrawing();
 
         ClearBackground(RAYWHITE);
@@ -37,24 +37,10 @@ int main() {
 
         game.draw();
 
-        // for (int i = 0; i < n; i++) {
-        //     for (int j = 0; j < n; j++) {
-        //         DrawRectangle(i * square_size, j * square_size + 100, square_size, square_size, LIGHTGRAY);
-        //         DrawRectangleLines(i * square_size, j * square_size + 100, square_size, square_size, BLACK);
-        //     }
-        // }
-
-        //timer.draw();
-
-        //DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
-
         EndDrawing();
-
-        //----------------------------------------------------------------------------------
     }
 
-    // De-Initialization
-    CloseWindow();        // Close window and OpenGL context
+    CloseWindow();
 
     return 0;
 }
