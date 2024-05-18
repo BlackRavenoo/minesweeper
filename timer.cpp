@@ -11,7 +11,7 @@ void Timer::restart() {
     start_time = std::chrono::high_resolution_clock::now();
     paused_time = std::chrono::high_resolution_clock::now();
     end_time = std::chrono::high_resolution_clock::now();
-    started = true;
+    started = false;
     paused = false;
 }
 

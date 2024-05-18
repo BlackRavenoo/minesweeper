@@ -24,6 +24,7 @@ public:
 
     int get_width();
     int get_height();
+    bool is_mines_generated();
 private:
     int width;
     int height;
@@ -38,6 +39,7 @@ private:
 
     Texture2D mine_texture;
     Texture2D flag_texture;
+    Texture2D numbers_texture;
 };
 
 #endif

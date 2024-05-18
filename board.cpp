@@ -3,7 +3,7 @@
 #include "math.h"
 
 Board::Board(int width, int height, int mines) {
-    assert(mines <= (width * height) - 1);
+    assert(mines <= (width * height) - 9);
     
     this->width = width;
     this->height = height;
@@ -19,6 +19,7 @@ Board::Board(int width, int height, int mines) {
 
     mine_texture = LoadTexture("resources/mine.png");
     flag_texture = LoadTexture("resources/flag.png");
+    numbers_texture = LoadTexture("resources/numbers.png");
 }
 
 void Board::restart() {
@@ -51,23 +52,81 @@ void Board::draw(int cell_size, int height_offset, int width_offset) {
         for(int j = 0; j < width; j++) {
             if(cells[i][j].is_open) {
                 if (cells[i][j].is_mine) {
-                    DrawRectangle(j * cell_size + width_offset, i * cell_size + height_offset, cell_size, cell_size, RED);
+                    DrawRectangle(
+                        j * cell_size + width_offset,
+                        i * cell_size + height_offset,
+                        cell_size,
+                        cell_size,
+                        RED
+                    );
 
-                    DrawTextureEx(mine_texture, {static_cast<float>(j) * cell_size + width_offset, static_cast<float>(i) * cell_size + height_offset}, 0, static_cast<float>(cell_size) / 512, WHITE);
+                    DrawTextureEx(
+                        mine_texture,
+                        {static_cast<float>(j) * cell_size + width_offset, static_cast<float>(i) * cell_size + height_offset},
+                        0,
+                        static_cast<float>(cell_size) / 512,
+                        WHITE
+                    );
                 } else {
-                    DrawRectangle(j * cell_size + width_offset, i * cell_size + height_offset, cell_size, cell_size, GREEN);
+                    DrawRectangle(
+                        j * cell_size + width_offset,
+                        i * cell_size + height_offset,
+                        cell_size,
+                        cell_size,
+                        //(i + j) & 1 ? Color{117,92,72, 255} : Color{188,152,126, 255}
+                        //DARKGREEN
+                        Color{0, 196, 73, 255}
+                    );
+
                     if (cells[i][j].mines_around > 0) {
-                        DrawText(std::to_string(cells[i][j].mines_around).c_str(), j * cell_size + width_offset + cell_size / 2 - 10, i * cell_size + height_offset + cell_size / 2 - 10, cell_size / 2, BLACK);
+                        //DrawText(std::to_string(cells[i][j].mines_around).c_str(), j * cell_size + width_offset + cell_size / 2 - 10, i * cell_size + height_offset + cell_size / 2 - 10, cell_size / 2, BLACK);
+                        DrawTexturePro(
+                            numbers_texture,
+                            {
+                                static_cast<float>(cells[i][j].mines_around) * 512 - 512,
+                                0,
+                                512,
+                                512
+                            },
+                            {
+                                static_cast<float>(j) * cell_size + width_offset,
+                                static_cast<float>(i) * cell_size + height_offset,
+                                static_cast<float>(cell_size),
+                                static_cast<float>(cell_size)
+                            },
+                            {0, 0},
+                            0,
+                            WHITE
+                        );
                     }
                 }
-            } else if (cells[i][j].has_flag) {
-                DrawRectangle(j * cell_size + width_offset, i * cell_size + height_offset, cell_size, cell_size, LIGHTGRAY);
-
-                DrawTextureEx(flag_texture, {static_cast<float>(j) * cell_size + width_offset, static_cast<float>(i) * cell_size + height_offset}, 0, static_cast<float>(cell_size) / 512, WHITE);
             } else {
-                DrawRectangle(j * cell_size + width_offset, i * cell_size + height_offset, cell_size, cell_size, LIGHTGRAY);
+                DrawRectangle(
+                    j * cell_size + width_offset,
+                    i * cell_size + height_offset,
+                    cell_size,
+                    cell_size,
+                    //(i + j) & 1 ? Color{68, 148, 74, 255} : Color{137, 172, 118, 255}
+                    LIGHTGRAY
+                );
+
+                if (cells[i][j].has_flag) {
+                    DrawTextureEx(
+                        flag_texture,
+                        {static_cast<float>(j) * cell_size + width_offset, static_cast<float>(i) * cell_size + height_offset},
+                        0,
+                        static_cast<float>(cell_size) / 512.0f,
+                        WHITE
+                    );
+                }
             }
-            DrawRectangleLines(j * cell_size + width_offset, i * cell_size + height_offset, cell_size, cell_size, BLACK);
+            DrawRectangleLines(
+                j * cell_size + width_offset,
+                i * cell_size + height_offset,
+                cell_size,
+                cell_size,
+                BLACK
+            );
         }
     }
 }
@@ -138,7 +197,7 @@ void Board::generate_mines(int _x, int _y) {
         int x = rand() % width;
         int y = rand() % height;
 
-        if (cells[y][x].is_mine || (x == _x && y == _y)){
+        if (cells[y][x].is_mine || (x >= _x - 1 && y >= _y - 1 && x <= _x + 1 && y <= _y + 1)) {
             i--;
         } else {
             cells[y][x].is_mine = true;
@@ -188,4 +247,8 @@ int Board::get_width() {
 
 int Board::get_height() {
     return height;
+}
+
+bool Board::is_mines_generated() {
+    return mines_generated;
 }

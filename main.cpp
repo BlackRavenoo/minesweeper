@@ -24,6 +24,11 @@ int main(int argc, char* argv[]) {
         mines = atoi(argv[3]);
     }
 
+    if (mines > (n * m) - 9) {
+        std::cout << "Too many mines!" << std::endl;
+        exit(1);
+    }
+    
     Game game(n, m, mines);
 
     SetTargetFPS(60);

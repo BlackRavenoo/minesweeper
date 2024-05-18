@@ -8,6 +8,8 @@ set(SOURCE_FILES main.cpp timer.cpp cell.cpp board.cpp game.cpp)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
+add_compile_options(-Wall -Wextra)
+
 add_link_options(-lraylib)
 
 add_executable(minesweeper ${SOURCE_FILES})
