@@ -16,6 +16,7 @@ void Timer::restart() {
 }
 
 void Timer::start() {
+    started = true;
     start_time = std::chrono::high_resolution_clock::now();
 }
 
@@ -44,11 +45,11 @@ int Timer::get_seconds() {
 }
 
 bool Timer::is_started() {
-    return start_time.time_since_epoch().count() != 0;
+    return started;
 }
 
 bool Timer::is_paused() {
-    return paused_time.time_since_epoch().count() != 0;
+    return paused;
 }
 
 void Timer::draw(int y_offset, int font_size, int width) {

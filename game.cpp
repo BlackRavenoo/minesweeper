@@ -62,7 +62,7 @@ void Game::process() {
             y = (y - y_offset) / cell_size;
 
             board->open(x, y);
-            if (board->is_mines_generated() && !timer->is_started()) {
+            if (!timer->is_started()) {
                 timer->start();
             }
             if (board->is_game_over()) {
