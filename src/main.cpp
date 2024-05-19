@@ -1,18 +1,10 @@
-#include <raylib.h>
+#include "raylib.h"
 #include "game.hpp"
 #include "timer.hpp"
 
 int main(int argc, char* argv[]) {
     const int screenWidth = 1280;
     const int screenHeight = 720;
-
-    Timer timer;
-
-    SetWindowIcon(LoadImage("resources/icon32.png"));
-
-    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
-
-    InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
 
     int n = 10;
     int m = 10;
@@ -28,6 +20,12 @@ int main(int argc, char* argv[]) {
         std::cout << "Too many mines!" << std::endl;
         exit(1);
     }
+
+    SetWindowIcon(LoadImage("resources/icon32.png"));
+
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+
+    InitWindow(screenWidth, screenHeight, "Minesweeper");
     
     Game game(n, m, mines);
 

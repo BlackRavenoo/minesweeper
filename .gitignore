@@ -1,6 +1,7 @@
 *.exe
 *.out
 *.app
+*.a
 CMakeFiles/
 .vscode/
 cmake_install.cmake

@@ -1,10 +1,7 @@
-#include <cassert>
 #include "board.hpp"
 #include "math.h"
 
 Board::Board(int width, int height, int mines) {
-    assert(mines <= (width * height) - 9);
-    
     this->width = width;
     this->height = height;
     this->mines = mines;
