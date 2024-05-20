@@ -70,11 +70,10 @@ void Board::draw(int cell_size, int height_offset, int width_offset) {
                         i * cell_size + height_offset,
                         cell_size,
                         cell_size,
-                        (i + j) & 1 ? Color{117,92,72, 255} : Color{188,152,126, 255}
+                        (i + j) & 1 ? Color{116, 92, 72, 255} : Color{155, 126, 100, 255}
                     );
 
                     if (cells[i][j].mines_around > 0) {
-                        //DrawText(std::to_string(cells[i][j].mines_around).c_str(), j * cell_size + width_offset + cell_size / 2 - 10, i * cell_size + height_offset + cell_size / 2 - 10, cell_size / 2, BLACK);
                         DrawTexturePro(
                             numbers_texture,
                             {
@@ -101,7 +100,7 @@ void Board::draw(int cell_size, int height_offset, int width_offset) {
                     i * cell_size + height_offset,
                     cell_size,
                     cell_size,
-                    (i + j) & 1 ? Color{68, 148, 74, 255} : Color{137, 172, 118, 255}
+                    (i + j) & 1 ? Color{66, 145, 72, 255} : Color{122, 153, 93, 255}
                 );
 
                 if (cells[i][j].has_flag) {

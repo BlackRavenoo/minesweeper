@@ -21,11 +21,11 @@ int main(int argc, char* argv[]) {
         exit(1);
     }
 
-    SetWindowIcon(LoadImage("resources/icon32.png"));
-
     SetConfigFlags(FLAG_WINDOW_RESIZABLE);
 
     InitWindow(screenWidth, screenHeight, "Minesweeper");
+
+    SetWindowIcon(LoadImage("resources/icon32.png"));
     
     Game game(n, m, mines);
 
