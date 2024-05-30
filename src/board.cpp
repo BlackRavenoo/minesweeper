@@ -124,7 +124,7 @@ void Board::draw(int cell_size, int height_offset, int width_offset) {
     }
 }
 
-void Board::open(int x, int y) {
+void Board::open(int x, int y, bool is_click) {
     if (x < 0 || x >= width || y < 0 || y >= height) {
         return;
     }
@@ -152,16 +152,43 @@ void Board::open(int x, int y) {
         }
 
         if (cells[y][x].mines_around == 0) {
-            open(x - 1, y - 1);
-            open(x, y - 1);
-            open(x + 1, y - 1);
-            open(x - 1, y);
-            open(x + 1, y);
-            open(x - 1, y + 1);
-            open(x, y + 1);
-            open(x + 1, y + 1);
+            open(x - 1, y - 1, false);
+            open(x, y - 1, false);
+            open(x + 1, y - 1, false);
+            open(x - 1, y, false);
+            open(x + 1, y, false);
+            open(x - 1, y + 1, false);
+            open(x, y + 1, false);
+            open(x + 1, y + 1, false);
         }
-    }
+    } else if (cells[y][x].is_open && cells[y][x].mines_around > 0 && is_click) {
+        int flags_around = 0;
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                if (x + i < 0 || x + i >= width || y + j < 0 || y + j >= height) {
+                    continue;
+                }
+
+                if (cells[y + j][x + i].has_flag) {
+                    flags_around++;
+                }
+            }
+        }
+
+        if (flags_around == cells[y][x].mines_around) {
+            for (int i = -1; i <= 1; i++) {
+                for (int j = -1; j <= 1; j++) {
+                    if ((i == 0 && j == 0) ||(x + i < 0 || x + i >= width || y + j < 0 || y + j >= height)) {
+                        continue;
+                    }
+
+                    if (!cells[y + j][x + i].has_flag) {
+                        open(x + i, y + j, false);
+                    }
+                }
+            }
+        }
+    } 
 }
 
 void Board::flag(int x, int y) {

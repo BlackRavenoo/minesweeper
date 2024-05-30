@@ -61,7 +61,7 @@ void Game::process() {
             x = (x - x_offset) / cell_size;
             y = (y - y_offset) / cell_size;
 
-            board->open(x, y);
+            board->open(x, y, true);
             if (!timer->is_started()) {
                 timer->start();
             }

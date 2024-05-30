@@ -16,7 +16,7 @@ public:
     Board(int width, int height, int mines);
     ~Board();
     void draw(int screen_height, int screen_width, int offset);
-    void open(int x, int y);
+    void open(int x, int y, bool is_click);
     void flag(int x, int y);
     bool is_game_over();
     bool is_game_won();
