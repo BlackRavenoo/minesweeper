@@ -24,6 +24,7 @@ void Board::restart() {
     closed_cells = width * height;
     mines_generated = false;
     game_state = PLAYING;
+    flags = 0;
 
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
