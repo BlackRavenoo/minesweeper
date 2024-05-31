@@ -4,6 +4,7 @@
 Game::Game(int width, int height, int mines) {
     board = new Board(width, height, mines);
     timer = new Timer();
+    counter = new Counter(mines);
 }
 
 Game::~Game() {
@@ -24,6 +25,7 @@ void Game::draw() {
     DrawText("R - Restart", 10, 10, font_size * 0.8, BLACK);
 
     timer->draw(y_offset, font_size, width);
+    counter->draw(y_offset, font_size, width);
 
     if (board->is_game_over()) {
         show_end_menu(width, height, font_size);
@@ -82,6 +84,7 @@ void Game::process() {
             board->flag(x, y);
         }
     }
+    counter->set_flags(board->get_flags());
 }
 
 void Game::show_end_menu(int width, int height, int font_size) {

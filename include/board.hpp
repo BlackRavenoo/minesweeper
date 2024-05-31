@@ -24,11 +24,13 @@ public:
 
     int get_width();
     int get_height();
+    int get_flags();
     bool is_mines_generated();
 private:
     int width;
     int height;
     int mines;
+    int flags;
     int closed_cells;
     bool mines_generated;
     Cell **cells;

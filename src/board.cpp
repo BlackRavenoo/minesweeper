@@ -8,6 +8,7 @@ Board::Board(int width, int height, int mines) {
     closed_cells = width * height;
     mines_generated = false;
     game_state = PLAYING;
+    flags = 0;
 
     cells = new Cell*[height];
     for(int i = 0; i < height; i++) {
@@ -192,13 +193,15 @@ void Board::open(int x, int y, bool is_click) {
 }
 
 void Board::flag(int x, int y) {
-    if (x < 0 || x >= width || y < 0 || y >= height) {
+    if (x < 0 || x >= width || y < 0 || y >= height || cells[y][x].is_open) {
         return;
     }
     if (cells[y][x].has_flag) {
         cells[y][x].has_flag = false;
+        flags -= 1;
     } else {
         cells[y][x].has_flag = true;
+        flags += 1;
     }
 }
 
@@ -267,6 +270,10 @@ int Board::get_width() {
 
 int Board::get_height() {
     return height;
+}
+
+int Board::get_flags() {
+    return flags;
 }
 
 bool Board::is_mines_generated() {

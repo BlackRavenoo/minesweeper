@@ -3,6 +3,7 @@
 
 #include "board.hpp"
 #include "timer.hpp"
+#include "counter.hpp"
 
 class Game {
 public:
@@ -14,6 +15,7 @@ public:
 private:
     Board *board;
     Timer *timer;
+    Counter *counter;
     int y_offset;
     int x_offset;
     int cell_size;
