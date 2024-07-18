@@ -8,7 +8,20 @@ void Counter::set_flags(int flags) {
 }
 
 void Counter::draw(int y_offset, int font_size, int width) {
-    int max_text_width = MeasureText("999/999", font_size);
+    int max_text_width;
+    int mines_len;
+
+    if (mines > 99) {
+        mines_len = 3;
+    } else {
+        mines_len = 2;
+    }
+
+    if (mines_len == 3) {
+        max_text_width = MeasureText("000/000", font_size);
+    } else {
+        max_text_width = MeasureText("00/00", font_size);
+    }
 
     int counter_padding = font_size * 0.1;
     int digit_spacing = font_size * 0.2;
@@ -27,27 +40,41 @@ void Counter::draw(int y_offset, int font_size, int width) {
     DrawRectangle(x - counter_padding, y - counter_padding, w + 2 * counter_padding + digit_spacing * 2, h + 2 * counter_padding, BLACK);
     DrawRectangle(x, y, w + digit_spacing * 2, h, DARKGRAY);
 
+    int padding_x = x + counter_padding;
+    int padding_y = y + counter_padding;
+
     char digit[2] = "0";
     int digit_width = MeasureText(digit, font_size);
 
-    digit[0] = '0' + flags / 100;
-    DrawText(digit, x + counter_padding, y + counter_padding, font_size, RED);
+    if (mines_len == 3) {
+        digit[0] = '0' + flags / 100;
+        DrawText(digit, padding_x, padding_y, font_size, RED);
+        padding_x += digit_width + digit_spacing;
+    }
 
     digit[0] = '0' + flags / 10 % 10;
-    DrawText(digit, x + counter_padding + digit_width + digit_spacing, y + counter_padding, font_size, RED);
+    DrawText(digit, padding_x, padding_y, font_size, RED);
+    padding_x += digit_width + digit_spacing;
 
     digit[0] = '0' + flags % 10;
-    DrawText(digit, x + counter_padding + digit_width * 2 + digit_spacing * 2, y + counter_padding, font_size, RED);
+    DrawText(digit, padding_x, padding_y, font_size, RED);
+    padding_x += digit_width + digit_spacing;
 
     int colon_width = MeasureText("/", font_size);
-    DrawText("/", x + counter_padding + digit_width * 3 + digit_spacing * 3, y + counter_padding, font_size, RED);
+    DrawText("/", padding_x, padding_y, font_size, RED);
+    padding_x += digit_width - digit_spacing * (mines_len - 1) + colon_width;
 
-    digit[0] = '0' + mines / 100;
-    DrawText(digit, x + counter_padding + digit_width * 4 + colon_width + digit_spacing, y + counter_padding, font_size, RED);
+    if (mines_len == 3) {
+        digit[0] = '0' + mines / 100;
+        DrawText(digit, padding_x, padding_y, font_size, RED);
+        padding_x += digit_width + digit_spacing;
+    }
 
     digit[0] = '0' + mines / 10 % 10;
-    DrawText(digit, x + counter_padding + digit_width * 5 + colon_width + digit_spacing * 2, y + counter_padding, font_size, RED);
+    DrawText(digit, padding_x, padding_y, font_size, RED);
+    padding_x += digit_width + digit_spacing;
 
     digit[0] = '0' + mines % 10;
-    DrawText(digit, x + counter_padding + digit_width * 6 + colon_width + digit_spacing * 3, y + counter_padding, font_size, RED);
+    DrawText(digit, padding_x, padding_y, font_size, RED);
+    padding_x += digit_width + digit_spacing;
 }

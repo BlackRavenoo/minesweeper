@@ -1,5 +1,6 @@
 #include "board.hpp"
 #include "math.h"
+#include "config.hpp"
 
 Board::Board(int width, int height, int mines) {
     this->width = width;
@@ -72,7 +73,7 @@ void Board::draw(int cell_size, int height_offset, int width_offset) {
                         i * cell_size + height_offset,
                         cell_size,
                         cell_size,
-                        (i + j) & 1 ? Color{116, 92, 72, 255} : Color{155, 126, 100, 255}
+                        (i + j) & 1 ? OPEN_CELL_COLOR1 : OPEN_CELL_COLOR2
                     );
 
                     if (cells[i][j].mines_around > 0) {
@@ -102,7 +103,7 @@ void Board::draw(int cell_size, int height_offset, int width_offset) {
                     i * cell_size + height_offset,
                     cell_size,
                     cell_size,
-                    (i + j) & 1 ? Color{66, 145, 72, 255} : Color{122, 153, 93, 255}
+                    (i + j) & 1 ? CLOSED_CELL_COLOR1 : CLOSED_CELL_COLOR2
                 );
 
                 if (cells[i][j].has_flag) {
